@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginBottom="10dp"
+    android:elevation="10dp"
+    app:cardCornerRadius="10dp"
+    >
+
+    <View
+        android:id="@+id/colorView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:background="@android:color/white"
+        android:paddingBottom="5dp">
+
+        <RelativeLayout
+            android:id="@+id/cardLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="5dp"
+            android:background="@drawable/card_background"
+            android:clickable="true"
+            android:padding="5dp">
+
+
+            <TextView
+                android:id="@+id/txtShowTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/thumbnail"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:paddingTop="5dp"
+                android:textColor="#303030"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                tools:text="Task Name" />
+
+
+            <TextView
+                android:id="@+id/txtDescription"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtShowTitle"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="4dp"
+                android:layout_toRightOf="@id/thumbnail"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@android:color/black"
+                android:textSize="14sp"
+                tools:text="Description" />
+
+            <TextView
+                android:id="@+id/txtCategory"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtShowTitle"
+                android:layout_alignParentEnd="true"
+                android:layout_marginLeft="10dp"
+                android:paddingRight="5dp"
+                android:textColor="@android:color/black"
+                android:textStyle="bold"
+                android:visibility="visible"
+                tools:text="Category" />
+
+            <TextView
+                android:id="@+id/textview1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/txtDescription"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:layout_toRightOf="@id/thumbnail"
+                android:text="Date"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview1"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/thumbnail"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                tools:text="26-3-2022" />
+
+            <TextView
+                android:id="@+id/txtTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/textview1"
+                android:layout_marginLeft="10dp"
+                android:layout_toRightOf="@id/txtDate"
+                android:textColor="@android:color/black"
+                android:visibility="visible"
+                tools:text="1:30 AM" />
+
+            <ImageView
+                android:id="@+id/thumbnail"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:src="@drawable/thumbnail"
+                android:adjustViewBounds="true"
+                android:maxHeight="300px"
+                android:maxWidth="250px"/>
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
