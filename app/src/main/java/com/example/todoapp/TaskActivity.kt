@@ -3,18 +3,29 @@ package com.example.todoapp
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
+import androidx.room.Room
 import kotlinx.android.synthetic.main.activity_task.*
+import kotlinx.android.synthetic.main.activity_task.dateEdt
+import kotlinx.android.synthetic.main.activity_task.saveBtn
+import kotlinx.android.synthetic.main.activity_task.spinnerCategory
+import kotlinx.android.synthetic.main.activity_task.taskInpLay
+import kotlinx.android.synthetic.main.activity_task.timeEdt
+import kotlinx.android.synthetic.main.activity_task.timeInptLay
+import kotlinx.android.synthetic.main.activity_task.titleInpLay
+import kotlinx.android.synthetic.main.activity_task.toolbarAddTask
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 const val DB_NAME = "todo.db"
 
@@ -25,11 +36,17 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     lateinit var timeSetListener: TimePickerDialog.OnTimeSetListener
 
+    private val sdf = SimpleDateFormat("EEE, d MMM yyyy")
+    private val now = System.currentTimeMillis()
+
     var finalDate = 0L
     var finalTime = 0L
 
+    private var taskId = -1L
+    private var isNew = true
 
-    private val labels = arrayListOf("Personal", "Business", "Insurance", "Shopping", "Banking")
+
+    private val labels = arrayListOf("Personal", "Family", "Friends", "Study")
 
 
     val db by lazy {
@@ -44,7 +61,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         timeEdt.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
 
-
+        setDefaults()
         setUpSpinner()
     }
 
@@ -71,6 +88,31 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         }
 
     }
+
+    private fun setDefaults() {
+        if (isNew) {
+            toolbarAddTask.title = getString(R.string.new_task)
+            saveBtn.text = getString(R.string.save_new_task)
+            dateEdt.setText(sdf.format(now))
+            titleInpLay.editText?.requestFocus()
+        }
+        else {
+            toolbarAddTask.title = getString(R.string.edit_task)
+            saveBtn.text = getString(R.string.save_edit_task)
+
+            GlobalScope.launch(Dispatchers.Main) {
+                val task =
+                    withContext(Dispatchers.IO) {
+                        return@withContext db.todoDao().getTask2(taskId)
+                    }
+                titleInpLay.editText?.setText(task.title)
+                dateEdt.isEnabled = false
+                dateEdt.setText(sdf.format(task.date))
+                timeEdt.setText(sdf.format(task.time))
+            }
+        }
+    }
+
 
     private fun saveTodo() {
         val category = spinnerCategory.selectedItem.toString()

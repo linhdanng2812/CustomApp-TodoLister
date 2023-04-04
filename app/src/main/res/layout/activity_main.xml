@@ -25,7 +25,8 @@
         android:layout_marginBottom="0dp"
         android:padding="8dp"
         tools:itemCount="4"
-        tools:listitem="@layout/item_todo" />
+        tools:listitem="@layout/item_todo"
+        />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button"

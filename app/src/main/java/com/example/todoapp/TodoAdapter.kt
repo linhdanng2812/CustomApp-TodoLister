@@ -1,8 +1,11 @@
 package com.example.todoapp
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView.OnItemClickListener
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_task.*
 import kotlinx.android.synthetic.main.item_todo.view.*
@@ -12,14 +15,15 @@ import java.util.*
 // first create adapter class. This inherits recycler view. Recycler view now requires view holder
 class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
+
     // 3 functions of the view holder
     // 1st func
     // In this Layout inflatter is called which converts view in such a form that adapter can consume it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
-        return TodoViewHolder(
-            LayoutInflater.from(parent.context)
+        val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_todo, parent, false)
-        )
+
+        return TodoViewHolder(itemView)
     }
 
 
@@ -38,6 +42,7 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
 
     // view holder is present inside the recycler view
     class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+
         fun bind(todoModel: TodoModel) {
             with(itemView) {
                 txtShowTitle.text = todoModel.title
@@ -45,7 +50,6 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
                 txtCategory.text = todoModel.category
                 updateTime(todoModel.time)
                 updateDate(todoModel.date)
-
             }
         }
         private fun updateTime(time: Long) {
@@ -63,6 +67,8 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
             itemView.txtDate.text = sdf.format(Date(time))
 
         }
+
+
     }
 
 }

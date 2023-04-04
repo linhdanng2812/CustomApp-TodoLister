@@ -17,6 +17,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
+
+
 class MainActivity : AppCompatActivity() {
 
     val list = arrayListOf<TodoModel>()
@@ -35,7 +37,7 @@ class MainActivity : AppCompatActivity() {
             adapter = this@MainActivity.adapter
         }
 
-        initSwipe()
+        ImplementSwipeFunction()
 
         db.todoDao().getTask().observe(this, Observer {
             if (!it.isNullOrEmpty()) {
@@ -47,11 +49,9 @@ class MainActivity : AppCompatActivity() {
                 adapter.notifyDataSetChanged()
             }
         })
-
-
     }
 
-    fun initSwipe() {
+    fun ImplementSwipeFunction() {
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0,
             ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -64,14 +64,13 @@ class MainActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
-
-                if (direction == ItemTouchHelper.LEFT) {
-                    GlobalScope.launch(Dispatchers.IO) {
-                        db.todoDao().deleteTask(adapter.getItemId(position))
-                    }
-                } else if (direction == ItemTouchHelper.RIGHT) {
+                if (direction == ItemTouchHelper.RIGHT) {
                     GlobalScope.launch(Dispatchers.IO) {
                         db.todoDao().finishTask(adapter.getItemId(position))
+                    }
+                } else if (direction == ItemTouchHelper.LEFT) {
+                    GlobalScope.launch(Dispatchers.IO) {
+                        db.todoDao().archiveTask(adapter.getItemId(position))
                     }
                 }
             }
@@ -206,7 +205,11 @@ class MainActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    fun openNewTask(view: View) {
-        startActivity(Intent(this, TaskActivity::class.java))
+
+    fun openNewTask(v: View) {
+        val i = (Intent(this, TaskActivity::class.java))
+        startActivity(i)
     }
+
+
 }
