@@ -40,6 +40,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
             adapter = this@MainActivity.adapter
         }
 
+
         ImplementSwipeFunction()
 
         db.todoDao().getTask().observe(this, Observer {
@@ -225,7 +226,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
 
         val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
         sharedPref.edit().apply() {
-            putLong("id", -1)
+            putLong("id", -1L)
         }.apply()
     }
 

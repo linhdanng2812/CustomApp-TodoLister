@@ -115,7 +115,9 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
                 titleInpLay.editText?.setText(task.title)
                 dateEdt.isEnabled = false
                 dateEdt.setText(sdf.format(task.date))
+                Log.i("taskid", task.id.toString())
             }
+
         }
     }
 
