@@ -31,7 +31,9 @@ interface TodoDao {
     @Update
     fun updateTask(task: TodoModel)
 
-
     @Query("SELECT * FROM TodoModel WHERE id=:uid")
-    fun getTask2(uid: Long): TodoModel
+    fun getEditTask(uid: Long): TodoModel
+
+    @Query("DELETE FROM TodoModel")
+    fun deleteAll()
 }

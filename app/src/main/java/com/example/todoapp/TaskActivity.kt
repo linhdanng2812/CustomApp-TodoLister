@@ -2,6 +2,7 @@ package com.example.todoapp
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -10,6 +11,7 @@ import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
 import androidx.room.Room
+import com.example.todoapp.Constant.EXTRA_TASK_ID
 import kotlinx.android.synthetic.main.activity_task.*
 import kotlinx.android.synthetic.main.activity_task.dateEdt
 import kotlinx.android.synthetic.main.activity_task.saveBtn
@@ -45,7 +47,6 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     private var taskId = -1L
     private var isNew = true
 
-
     private val labels = arrayListOf("Personal", "Family", "Friends", "Study")
 
 
@@ -61,8 +62,15 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         timeEdt.setOnClickListener(this)
         saveBtn.setOnClickListener(this)
 
-        setDefaults()
+        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+        taskId = sharedPref.getLong("id", -1L)
+
+        isNew = taskId == -1L
+
         setUpSpinner()
+
+        setDefaults()
+
     }
 
     private fun setUpSpinner() {
@@ -95,23 +103,23 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
             saveBtn.text = getString(R.string.save_new_task)
             dateEdt.setText(sdf.format(now))
             titleInpLay.editText?.requestFocus()
-        }
-        else {
+        } else {
             toolbarAddTask.title = getString(R.string.edit_task)
             saveBtn.text = getString(R.string.save_edit_task)
 
             GlobalScope.launch(Dispatchers.Main) {
                 val task =
                     withContext(Dispatchers.IO) {
-                        return@withContext db.todoDao().getTask2(taskId)
+                        return@withContext db.todoDao().getEditTask(taskId)
                     }
                 titleInpLay.editText?.setText(task.title)
                 dateEdt.isEnabled = false
                 dateEdt.setText(sdf.format(task.date))
-                timeEdt.setText(sdf.format(task.time))
             }
         }
     }
+
+
 
 
     private fun saveTodo() {

@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 // first create adapter class. This inherits recycler view. Recycler view now requires view holder
-class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
+class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
 
     // 3 functions of the view holder
@@ -40,8 +40,21 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
         return list[position].id
     }
 
+    interface OnItemClickListener {
+        fun onItemClick(position: Int)
+    }
     // view holder is present inside the recycler view
-    class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(v: View?) {
+            val position: Int = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                listener.onItemClick(position)
+            }
+        }
 
         fun bind(todoModel: TodoModel) {
             with(itemView) {
@@ -53,7 +66,6 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
             }
         }
         private fun updateTime(time: Long) {
-            //Mon, 5 Jan 2020
             val myformat = "h:mm a"
             val sdf = SimpleDateFormat(myformat)
             itemView.txtTime.text = sdf.format(Date(time))

@@ -1,11 +1,14 @@
 package com.example.todoapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.*
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -19,10 +22,10 @@ import kotlinx.coroutines.launch
 
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
 
     val list = arrayListOf<TodoModel>()
-    var adapter = TodoAdapter(list)
+    var adapter = TodoAdapter(list, this)
 
     val db by lazy {
         AppDatabase.getDatabase(this)
@@ -51,6 +54,16 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    override fun onItemClick(position: Int) {
+        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+        sharedPref.edit().apply() {
+            putLong("id", position.toLong())
+        }.apply()
+        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+        Log.i("state", position.toString())
+        adapter.notifyItemChanged(position)
+    }
+
     fun ImplementSwipeFunction() {
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -70,7 +83,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 } else if (direction == ItemTouchHelper.LEFT) {
                     GlobalScope.launch(Dispatchers.IO) {
-                        db.todoDao().archiveTask(adapter.getItemId(position))
+                        db.todoDao().permanentDeleteTask(adapter.getItemId(position))
                     }
                 }
             }
@@ -199,7 +212,7 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.history -> {
-                startActivity(Intent(this, HistoryActivity::class.java))
+                startActivity(Intent(this, MainActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -207,9 +220,18 @@ class MainActivity : AppCompatActivity() {
 
 
     fun openNewTask(v: View) {
+       val i = (Intent(this, TaskActivity::class.java))
+        startActivity(i)
+
+        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+        sharedPref.edit().apply() {
+            putLong("id", -1)
+        }.apply()
+    }
+
+    fun openEditTask(v: View) {
         val i = (Intent(this, TaskActivity::class.java))
         startActivity(i)
     }
-
 
 }
