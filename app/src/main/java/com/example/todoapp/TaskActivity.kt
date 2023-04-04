@@ -10,8 +10,6 @@ import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
-import androidx.room.Room
-import com.example.todoapp.Constant.EXTRA_TASK_ID
 import kotlinx.android.synthetic.main.activity_task.*
 import kotlinx.android.synthetic.main.activity_task.dateEdt
 import kotlinx.android.synthetic.main.activity_task.saveBtn
@@ -124,18 +122,37 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
 
 
     private fun saveTodo() {
+
         val category = spinnerCategory.selectedItem.toString()
         val title = titleInpLay.editText?.text.toString()
         val description = doneInput.editText?.text.toString()
-        GlobalScope.launch(Dispatchers.Main) {
-            withContext(Dispatchers.IO) {
-                val task = TodoModel(title, description, category, finalDate, finalTime)
-                return@withContext db.todoDao().updateTask(task)
-            }
-            finish()
-        }
 
-    }
+        if (isNew) {
+            GlobalScope.launch(Dispatchers.Main) {
+                val id = withContext(Dispatchers.IO) {
+                    return@withContext db.todoDao().insertTask(
+                        TodoModel(
+                            title,
+                            description,
+                            category,
+                            finalDate,
+                            finalTime
+                        )
+                    )
+                }
+                finish()
+            }
+        }
+        else {
+                GlobalScope.launch(Dispatchers.Main) {
+                    withContext(Dispatchers.IO) {
+                        val task = TodoModel(title, description, category, finalDate, finalTime)
+                        return@withContext db.todoDao().updateTask(task)
+                    }
+                    finish()
+                }
+            }
+        }
 
     private fun setTimeListener() {
         myCalendar = Calendar.getInstance()

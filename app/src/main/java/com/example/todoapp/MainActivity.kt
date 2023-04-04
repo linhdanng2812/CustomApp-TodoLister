@@ -40,6 +40,9 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
             adapter = this@MainActivity.adapter
         }
 
+//        GlobalScope.launch(Dispatchers.IO) {
+//            db.todoDao().clearPrimaryKey()
+//        }
 
         ImplementSwipeFunction()
 

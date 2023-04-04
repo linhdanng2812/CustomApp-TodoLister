@@ -36,4 +36,7 @@ interface TodoDao {
 
     @Query("DELETE FROM TodoModel")
     fun deleteAll()
+
+    @Query("UPDATE sqlite_sequence SET seq = 1 WHERE name = 'TodoModel'")
+    fun clearPrimaryKey();
 }
