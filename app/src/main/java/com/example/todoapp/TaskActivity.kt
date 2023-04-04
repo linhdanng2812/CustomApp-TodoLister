@@ -146,7 +146,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         else {
                 GlobalScope.launch(Dispatchers.Main) {
                     withContext(Dispatchers.IO) {
-                        val task = TodoModel(title, description, category, finalDate, finalTime)
+                        val task = TodoModel(title, description, category, finalDate, finalTime, 0, taskId)
                         return@withContext db.todoDao().updateTask(task)
                     }
                     finish()
