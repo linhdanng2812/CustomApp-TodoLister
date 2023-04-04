@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_task.*
 import kotlinx.android.synthetic.main.activity_task.dateEdt
 import kotlinx.android.synthetic.main.activity_task.saveBtn
 import kotlinx.android.synthetic.main.activity_task.spinnerCategory
-import kotlinx.android.synthetic.main.activity_task.taskInpLay
+
 import kotlinx.android.synthetic.main.activity_task.timeEdt
 import kotlinx.android.synthetic.main.activity_task.timeInptLay
 import kotlinx.android.synthetic.main.activity_task.titleInpLay
@@ -64,6 +64,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
 
         val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
         taskId = sharedPref.getLong("id", -1L)
+
 
         isNew = taskId == -1L
 
@@ -113,33 +114,23 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
                         return@withContext db.todoDao().getEditTask(taskId)
                     }
                 titleInpLay.editText?.setText(task.title)
-                dateEdt.isEnabled = false
+                doneInput.editText?.setText(task.description)
+                dateEdt.isEnabled = true
                 dateEdt.setText(sdf.format(task.date))
                 Log.i("taskid", task.id.toString())
             }
-
         }
     }
-
-
 
 
     private fun saveTodo() {
         val category = spinnerCategory.selectedItem.toString()
         val title = titleInpLay.editText?.text.toString()
-        val description = taskInpLay.editText?.text.toString()
-
+        val description = doneInput.editText?.text.toString()
         GlobalScope.launch(Dispatchers.Main) {
-            val id = withContext(Dispatchers.IO) {
-                return@withContext db.todoDao().insertTask(
-                    TodoModel(
-                        title,
-                        description,
-                        category,
-                        finalDate,
-                        finalTime
-                    )
-                )
+            withContext(Dispatchers.IO) {
+                val task = TodoModel(title, description, category, finalDate, finalTime)
+                return@withContext db.todoDao().updateTask(task)
             }
             finish()
         }

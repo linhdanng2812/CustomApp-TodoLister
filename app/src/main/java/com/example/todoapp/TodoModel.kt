@@ -34,15 +34,3 @@ data class Action(
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 )
 
-data class TaskWithActions(
-    @Embedded val task: TodoModel,
-    @Relation(parentColumn = "id", entityColumn = "task_id") val actions: List<Action>
-) {
-
-
-}
-
-data class ActionWithTask(
-    @Relation(parentColumn = "task_id", entityColumn = "id") val task: TodoModel,
-    @Embedded val action: Action
-)
