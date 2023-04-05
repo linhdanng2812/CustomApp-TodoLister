@@ -53,7 +53,18 @@ class HistoryActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener{
 
 
     override fun onItemClick(position: Int) {
+        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+        sharedPref.edit().apply() {
+            putLong("transfer", list[position].id)
+        }.apply()
+        //Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
 
+        val i = Intent(this, TaskActivity::class.java)
+        i.putExtra("id", list[position].id)
+        startActivity(i)
+        //Log.i("state", position.toString())
+        Log.i("state", list[position].id.toString())
+        adapter.notifyItemChanged(position)
     }
 
     fun ImplementSwipeFunction() {

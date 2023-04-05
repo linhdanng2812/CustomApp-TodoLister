@@ -61,10 +61,15 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
     override fun onItemClick(position: Int) {
         val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
         sharedPref.edit().apply() {
-            putLong("id", position.toLong())
+            putLong("transfer", list[position].id)
         }.apply()
-        Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
-        Log.i("state", position.toString())
+        //Toast.makeText(this, "Item $position clicked", Toast.LENGTH_SHORT).show()
+
+        val i = Intent(this, TaskActivity::class.java)
+        i.putExtra("id", list[position].id)
+        startActivity(i)
+        //Log.i("state", position.toString())
+        Log.i("state", list[position].id.toString())
         adapter.notifyItemChanged(position)
     }
 
@@ -87,7 +92,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                     }
                 } else if (direction == ItemTouchHelper.LEFT) {
                     GlobalScope.launch(Dispatchers.IO) {
-                        db.todoDao().permanentDeleteTask(adapter.getItemId(position))
+                        db.todoDao().archiveTask(adapter.getItemId(position))
                     }
                 }
             }
@@ -216,7 +221,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.history -> {
-                startActivity(Intent(this, MainActivity::class.java))
+                startActivity(Intent(this, HistoryActivity::class.java))
             }
         }
         return super.onOptionsItemSelected(item)
@@ -227,15 +232,18 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
        val i = (Intent(this, TaskActivity::class.java))
         startActivity(i)
 
-        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
-        sharedPref.edit().apply() {
-            putLong("id", -1L)
-        }.apply()
+//        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+//        sharedPref.edit().apply() {
+//            putLong("id", -1L)
+//        }.apply()
     }
 
-    fun openEditTask(v: View) {
-        val i = (Intent(this, TaskActivity::class.java))
-        startActivity(i)
-    }
+//    fun openEditTask(v: View) {
+//        val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
+//        val transfer = sharedPref.getLong("transfer", -1L)
+//        val i = (Intent(this, TaskActivity::class.java))
+//        i.putExtra("id", transfer)
+//        startActivity(i)
+//    }
 
 }

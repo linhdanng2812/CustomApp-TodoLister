@@ -47,7 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:id="@+id/titleInpLay"
+        android:id="@+id/titleInput"
         app:hintTextColor="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
         android:layout_marginEnd="16dp"
@@ -123,7 +123,7 @@
         android:elevation="15dp">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/dateEdt"
+            android:id="@+id/dateField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -152,7 +152,7 @@
         app:hintTextColor="@color/colorAccent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/timeEdt"
+            android:id="@+id/timeField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:clickable="true"
@@ -180,7 +180,7 @@
         android:layout_marginTop="8dp">
 
         <Spinner
-            android:id="@+id/spinnerCategory"
+            android:id="@+id/dropdownCategory"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
@@ -193,7 +193,7 @@
     </LinearLayout>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/saveBtn"
+        android:id="@+id/btnSave"
         android:layout_width="wrap_content"
         android:layout_height="42dp"
         android:layout_gravity="right|end"
