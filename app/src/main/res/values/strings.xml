@@ -1,32 +1,14 @@
 <resources>
-    <string name="app_name">DoonIt</string>
+    <string name="app_name">MyTodoList</string>
     <!-- menu -->
     <string name="completed_tasks">History</string>
     <!-- new task -->
     <string name="new_task">New Task</string>
     <string name="enter_name">Set Title</string>
     <string name="name_hint">Enter task title</string>
-    <string name="enter_date">Set Start Date</string>
-    <string name="date_hint">Set initial date</string>
-    <string name="enter_frequency">Set Frequency</string>
-    <string name="frequency_hint">Enter frequency in days</string>
     <string name="save_new_task">Create Task</string>
     <string name="delete_task">Delete Task</string>
     <!-- edit task -->
     <string name="edit_task">Edit Task</string>
     <string name="save_edit_task">Update Task</string>
-    <!-- summary -->
-    <string name="score_total">Score</string>
-    <string name="score_label_neg">Behind Schedule</string>
-    <string name="score_label_pos">Ahead of Schedule</string>
-    <!-- item -->
-    <string name="next_label">Next Due</string>
-    <string name="delta_label">Due</string>
-    <string name="date_label">Date</string>
-    <string name="time_label">Time</string>
-    <string name="one_day_ahead">Tomorrow</string>
-    <string name="today">Today</string>
-    <string name="one_day_behind">Yesterday</string>
-    <!-- item completed -->
-    <string name="completed_date_label">Performed</string>
 </resources>

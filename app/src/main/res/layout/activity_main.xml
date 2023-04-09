@@ -4,19 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/background_color">
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         app:titleTextColor="@android:color/white"
         app:title="My To-do List"
-        android:background="?attr/colorPrimary"
+        style="@style/MenuColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:onClick="openEditTask"
         android:id="@+id/todoRv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -26,8 +24,7 @@
         android:layout_marginBottom="0dp"
         android:padding="8dp"
         tools:itemCount="4"
-        tools:listitem="@layout/item_todo"
-        />
+        tools:listitem="@layout/item_todo" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button"
@@ -45,6 +42,5 @@
         app:backgroundTint="#7965AF"
         app:rippleColor="#FFFFFF"
         tools:ignore="SpeakableTextPresentCheck" />
-
 
 </RelativeLayout>

@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:background="@color/background_color">
+    tools:context=".MainActivity">
 
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         app:titleTextColor="@android:color/white"
+        android:theme="@style/AppTheme.AppBarOverlay"
         app:title="History"
-        android:background="?attr/colorPrimary"
+        style="@style/MenuColor"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

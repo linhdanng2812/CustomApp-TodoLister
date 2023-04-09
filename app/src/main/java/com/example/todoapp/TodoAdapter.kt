@@ -12,13 +12,8 @@ import kotlinx.android.synthetic.main.item_todo.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// first create adapter class. This inherits recycler view. Recycler view now requires view holder
 class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickListener) : RecyclerView.Adapter<TodoAdapter.TodoViewHolder>() {
 
-
-    // 3 functions of the view holder
-    // 1st func
-    // In this Layout inflatter is called which converts view in such a form that adapter can consume it
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val itemView = LayoutInflater.from(parent.context)
                 .inflate(R.layout.item_todo, parent, false)
@@ -28,23 +23,24 @@ class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickLi
 
 
     override fun getItemCount() = list.size
-    
-    // 2nd func
-    // this will set data in each card
+
     override fun onBindViewHolder(holder: TodoViewHolder, position: Int) {
-        holder.bind(list[position]) // we are passing the object of the list that we made in the ToDoModel.kt
+        holder.bind(list[position]) // passing the object of the list that we made in the ToDoModel.kt
     }
 
-    // 3rd func
+    //get the ID of the clicked item
     override fun getItemId(position: Int): Long {
         return list[position].id
     }
 
+    //when an item is clicked
     interface OnItemClickListener {
         fun onItemClick(position: Int)
     }
-    // view holder is present inside the recycler view
+
+    //display the list as the RecyclerView
     inner class TodoViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        //initialize
         init {
             itemView.setOnClickListener(this)
         }
@@ -55,7 +51,7 @@ class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickLi
                 listener.onItemClick(position)
             }
         }
-
+        //display the task details
         fun bind(todoModel: TodoModel) {
             with(itemView) {
                 txtShowTitle.text = todoModel.title
@@ -65,13 +61,13 @@ class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickLi
                 updateDate(todoModel.date)
             }
         }
+        //display the time on the time row
         private fun updateTime(time: Long) {
             val myformat = "h:mm a"
             val sdf = SimpleDateFormat(myformat)
             itemView.txtTime.text = sdf.format(Date(time))
-
         }
-
+        //display the date on the item row
         private fun updateDate(time: Long) {
             //Mon, 5 Jan 2020
             val myformat = "EEE, d MMM yyyy"

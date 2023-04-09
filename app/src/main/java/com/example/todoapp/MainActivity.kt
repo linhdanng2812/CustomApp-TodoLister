@@ -73,6 +73,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
         adapter.notifyItemChanged(position)
     }
 
+    //handle the swipe action
     fun ImplementSwipeFunction() {
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -86,11 +87,14 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val position = viewHolder.adapterPosition
+                //swipe to the right -> restore
                 if (direction == ItemTouchHelper.RIGHT) {
                     GlobalScope.launch(Dispatchers.IO) {
                         db.todoDao().finishTask(adapter.getItemId(position))
                     }
-                } else if (direction == ItemTouchHelper.LEFT) {
+                }
+                //swipe to the left -> delete -> move to the archive
+                else if (direction == ItemTouchHelper.LEFT) {
                     GlobalScope.launch(Dispatchers.IO) {
                         db.todoDao().archiveTask(adapter.getItemId(position))
                     }
@@ -108,39 +112,29 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
             ) {
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     val itemView = viewHolder.itemView
-
                     val paint = Paint()
                     val icon: Bitmap
-
                     if (dX > 0) {
-
                         icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_check_white_png)
-
                         paint.color = Color.parseColor("#388E3C")
-
                         canvas.drawRect(
                             itemView.left.toFloat(), itemView.top.toFloat(),
                             itemView.left.toFloat() + dX, itemView.bottom.toFloat(), paint
                         )
-
                         canvas.drawBitmap(
                             icon,
                             itemView.left.toFloat(),
                             itemView.top.toFloat() + (itemView.bottom.toFloat() - itemView.top.toFloat() - icon.height.toFloat()) / 2,
                             paint
                         )
-
-
-                    } else {
+                    }
+                    else {
                         icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_delete_white_png)
-
                         paint.color = Color.parseColor("#D32F2F")
-
                         canvas.drawRect(
                             itemView.right.toFloat() + dX, itemView.top.toFloat(),
                             itemView.right.toFloat(), itemView.bottom.toFloat(), paint
                         )
-
                         canvas.drawBitmap(
                             icon,
                             itemView.right.toFloat() - icon.width,
@@ -149,9 +143,8 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                         )
                     }
                     viewHolder.itemView.translationX = dX
-
-
-                } else {
+                }
+                else {
                     super.onChildDraw(
                         canvas,
                         recyclerView,
@@ -163,14 +156,12 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                     )
                 }
             }
-
-
         }
-
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(todoRv)
     }
 
+    //display the toolbar with menu icon and search bar
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main_menu, menu)
         val item = menu.findItem(R.id.search)
@@ -180,30 +171,28 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                 displayTodo()
                 return true
             }
-
             override fun onMenuItemActionCollapse(item: MenuItem?): Boolean {
                 displayTodo()
                 return true
             }
-
         })
+        //react when user enter sth in the search view
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 if(!newText.isNullOrEmpty()){
                     displayTodo(newText)
                 }
                 return true
             }
-
         })
 
         return super.onCreateOptionsMenu(menu)
     }
 
+    //display the search result
     fun displayTodo(newText: String = "") {
         db.todoDao().getTask().observe(this, Observer {
             if(it.isNotEmpty()){
@@ -218,8 +207,12 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
         })
     }
 
+    // display the dropdown menu
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
+            R.id.home -> {
+                startActivity(Intent(this, MainActivity::class.java))
+            }
             R.id.history -> {
                 startActivity(Intent(this, HistoryActivity::class.java))
             }
@@ -227,7 +220,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
         return super.onOptionsItemSelected(item)
     }
 
-
+    //open the TaskActivity with all blank fields
     fun openNewTask(v: View) {
        val i = (Intent(this, TaskActivity::class.java))
         startActivity(i)

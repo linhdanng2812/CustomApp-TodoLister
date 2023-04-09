@@ -25,27 +25,23 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.system.exitProcess
 
 const val DB_NAME = "todo.db"
 
 class TaskActivity : AppCompatActivity(), View.OnClickListener {
 
     lateinit var myCalendar: Calendar
-
     lateinit var dateSetListener: DatePickerDialog.OnDateSetListener
     lateinit var timeSetListener: TimePickerDialog.OnTimeSetListener
-
     private val sdf = SimpleDateFormat("EEE, d MMM yyyy")
     private val now = System.currentTimeMillis()
-
     var finalDate = 0L
     var finalTime = 0L
-
     private var taskId = -1L
     private var isNew = true
-
+    private var check = true
     private val labels = arrayListOf("Personal", "Family", "Friends", "Study")
-
 
     val db by lazy {
         AppDatabase.getDatabase(this)
@@ -54,35 +50,33 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
-
         dateField.setOnClickListener(this)
         timeField.setOnClickListener(this)
         btnSave.setOnClickListener(this)
 
         //val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)
         //taskId = sharedPref.getLong("id", -1L)
+
+        //get the stored task ID from the MainActivity
         taskId = intent.getLongExtra("id", -1L)
         Log.i("taskID", taskId.toString())
         isNew = taskId == -1L
-
-        setUpSpinner()
+        setUpDropdownList()
         setDefaults()
-
     }
 
-    private fun setUpSpinner() {
-        val adapter =
-            ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels)
-
+    //setup the dropdown category list
+    private fun setUpDropdownList() {
+        val adapter = ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, labels)
         labels.sort()
-
         dropdownCategory.adapter = adapter
     }
 
+    //handle click on different icons
     override fun onClick(v: View) {
         when (v.id) {
             R.id.btnSave -> {
-                saveTodoTask()
+                if (check) { saveTodoTask() }
             }
             R.id.dateField -> {
                 setDateListener()
@@ -91,16 +85,19 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
                 setTimeListener()
             }
         }
-
     }
 
+    //set the default value
     private fun setDefaults() {
+        //when create a new task
         if (isNew) {
             toolbarAddTask.title = getString(R.string.new_task)
             btnSave.text = getString(R.string.save_new_task)
             dateField.setText(sdf.format(now))
             titleInput.editText?.requestFocus()
-        } else {
+        }
+        //when modify an existing task
+        else {
             toolbarAddTask.title = getString(R.string.edit_task)
             btnSave.text = getString(R.string.save_edit_task)
 
@@ -118,12 +115,20 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         }
     }
 
-
+    //when the 'Save' or 'Create' button is clicked
     private fun saveTodoTask() {
         val category = dropdownCategory.selectedItem.toString()
         val title = titleInput.editText?.text.toString()
         val description = doneInput.editText?.text.toString()
 
+        //display the length errors
+        if (!isValidateLength(titleInput.editText?.text.toString())) {
+            titleInput.setError("Title must be between 1-15")
+        }
+        if (!isValidateLength(doneInput.editText?.text.toString())) {
+            doneInput.setError("Description must be between 1-15")
+        }
+        //save new task
         if (isNew) {
             GlobalScope.launch(Dispatchers.Main) {
                 val id = withContext(Dispatchers.IO) {
@@ -140,6 +145,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
                 finish()
             }
         }
+        //save new changes to an existing task
         else {
                 GlobalScope.launch(Dispatchers.Main) {
                     withContext(Dispatchers.IO) {
@@ -151,44 +157,16 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
             }
         }
 
-    private fun setTimeListener() {
-        myCalendar = Calendar.getInstance()
-
-        timeSetListener =
-            TimePickerDialog.OnTimeSetListener() { _: TimePicker, hourOfDay: Int, min: Int ->
-                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
-                myCalendar.set(Calendar.MINUTE, min)
-                updateTime()
-            }
-
-        val timePickerDialog = TimePickerDialog(
-            this, timeSetListener, myCalendar.get(Calendar.HOUR_OF_DAY),
-            myCalendar.get(Calendar.MINUTE), false
-        )
-        timePickerDialog.show()
-    }
-
-    private fun updateTime() {
-        //Mon, 5 Jan 2020
-        val myformat = "h:mm a"
-        val sdf = SimpleDateFormat(myformat)
-        finalTime = myCalendar.time.time
-        timeField.setText(sdf.format(myCalendar.time))
-
-    }
-
+    //setup the date selector
     private fun setDateListener() {
         myCalendar = Calendar.getInstance()
-
         dateSetListener =
             DatePickerDialog.OnDateSetListener { _: DatePicker, year: Int, month: Int, dayOfMonth: Int ->
                 myCalendar.set(Calendar.YEAR, year)
                 myCalendar.set(Calendar.MONTH, month)
                 myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth)
                 updateDate()
-
             }
-
         val datePickerDialog = DatePickerDialog(
             this, dateSetListener, myCalendar.get(Calendar.YEAR),
             myCalendar.get(Calendar.MONTH), myCalendar.get(Calendar.DAY_OF_MONTH)
@@ -196,16 +174,46 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         datePickerDialog.datePicker.minDate = System.currentTimeMillis()
         datePickerDialog.show()
     }
-
+    //update new date
     private fun updateDate() {
         //Mon, 5 Jan 2020
         val myformat = "EEE, d MMM yyyy"
         val sdf = SimpleDateFormat(myformat)
         finalDate = myCalendar.time.time
         dateField.setText(sdf.format(myCalendar.time))
-
         timeInptLay.visibility = View.VISIBLE
+    }
+
+    //setup the time selector
+    private fun setTimeListener() {
+        myCalendar = Calendar.getInstance()
+        timeSetListener =
+            TimePickerDialog.OnTimeSetListener() { _: TimePicker, hourOfDay: Int, min: Int ->
+                myCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay)
+                myCalendar.set(Calendar.MINUTE, min)
+                updateTime()
+            }
+        val timePickerDialog = TimePickerDialog(
+            this, timeSetListener, myCalendar.get(Calendar.HOUR_OF_DAY),
+            myCalendar.get(Calendar.MINUTE), false
+        )
+        timePickerDialog.show()
+    }
+
+    //update new time
+    private fun updateTime() {
+        val format = "h:mm a"
+        val sdf = SimpleDateFormat(format)
+        finalTime = myCalendar.time.time
+        timeField.setText(sdf.format(myCalendar.time))
 
     }
 
+    //validate the length of entered value
+    fun isValidateLength(str: String): Boolean {
+        if (str.length in 1..15) {
+            return true
+        }
+        return false
+    }
 }

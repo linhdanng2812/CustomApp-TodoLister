@@ -17,20 +17,4 @@ data class TodoModel(
     var id:Long = 0
 )
 
-@Entity(
-    foreignKeys =
-    [
-        ForeignKey(
-            entity = TodoModel::class,
-            parentColumns = ["id"],
-            childColumns = ["task_id"],
-            onDelete = ForeignKey.CASCADE
-        )
-    ]
-)
-data class Action(
-    var task_id: Long,
-    var timestamp: Long,
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
-)
 

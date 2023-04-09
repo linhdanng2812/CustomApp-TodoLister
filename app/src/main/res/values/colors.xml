@@ -4,10 +4,14 @@
     <color name="colorPrimaryDark">#E3789E</color>
 
     <color name="text_color">#E3789E</color>
-    <color name="background_color">#FFD9E4</color>
+
     <color name="colorAccent">#422AA3</color>
     <color name="newtask_text_color">#6750A4</color>
+    <color name="newtask_text_color_dark">#ffffff</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="background_color_light">#FFD9E4</color>
+    <color name="background_color_dark">#323949</color>
 </resources>
