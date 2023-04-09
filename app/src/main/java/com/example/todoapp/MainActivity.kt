@@ -141,7 +141,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                 dY: Float,
                 actionState: Int,
                 isCurrentlyActive: Boolean
-            ) {
+            ) { //draw a green box for complete
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     val itemView = viewHolder.itemView
                     val paint = Paint()
@@ -160,7 +160,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                             paint
                         )
                     }
-                    else {
+                    else { //draw a red box for archiving
                         icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_delete_white_png)
                         paint.color = Color.parseColor("#D32F2F")
                         canvas.drawRect(
@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
             }
         }
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(todoRv)
+        itemTouchHelper.attachToRecyclerView(todoRv) //attach the swipe to the RecyclerView
     }
 
     //display the toolbar with menu icon and search bar

@@ -4,7 +4,7 @@ import androidx.room.*
 import kotlin.time.Duration
 import kotlin.time.toDuration
 
-// we are making list for each task
+
 @Entity
 data class TodoModel(
     var title:String,

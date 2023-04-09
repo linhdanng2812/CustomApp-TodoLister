@@ -15,9 +15,11 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar" />
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light" />
+
     <style name="MenuColor" parent="Theme.MaterialComponents">
         <item name="android:background">@color/colorPrimary</item>
     </style>
+
     <style name="MenuIconColor" parent="Widget.AppCompat.Light.ActionButton.Overflow">
         <item name="tint">#ffffff</item>
     </style>
@@ -25,6 +27,5 @@
     <style name="ChangeTextColor" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/black</item>
     </style>
-
 
 </resources>

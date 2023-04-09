@@ -110,7 +110,7 @@ class HistoryActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener{
                 dY: Float,
                 actionState: Int,
                 isCurrentlyActive: Boolean
-            ) {
+            ) { //create a green box for restoring
                 if (actionState == ItemTouchHelper.ACTION_STATE_SWIPE) {
                     val itemView = viewHolder.itemView
                     val paint = Paint()
@@ -129,7 +129,7 @@ class HistoryActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener{
                             paint
                         )
                     }
-                    else {
+                    else { //create a red box for permanent delete
                         icon = BitmapFactory.decodeResource(resources, R.mipmap.ic_delete_white_png)
                         paint.color = Color.parseColor("#D32F2F")
                         canvas.drawRect(

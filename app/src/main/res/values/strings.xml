@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyTodoList</string>
+    <string name="app_name">ToDoLister</string>
     <!-- menu -->
     <string name="completed_tasks">History</string>
     <!-- new task -->

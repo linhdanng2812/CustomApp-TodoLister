@@ -1,14 +1,11 @@
 package com.example.todoapp
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView.OnItemClickListener
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_task.*
-import kotlinx.android.synthetic.main.item_todo.view.*
+import kotlinx.android.synthetic.main.row_layout.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -16,7 +13,7 @@ class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickLi
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TodoViewHolder {
         val itemView = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_todo, parent, false)
+                .inflate(R.layout.row_layout, parent, false)
 
         return TodoViewHolder(itemView)
     }
@@ -73,12 +70,8 @@ class TodoAdapter(val list: List<TodoModel>, private val listener: OnItemClickLi
             val myformat = "EEE, d MMM yyyy"
             val sdf = SimpleDateFormat(myformat)
             itemView.txtDate.text = sdf.format(Date(time))
-
         }
-
-
     }
-
 }
 
 
