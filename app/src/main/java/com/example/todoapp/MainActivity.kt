@@ -21,7 +21,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 
-
+//Student ID: 103488557
+//Student Name: Nguyen Linh Dan
 class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
 
     val list = arrayListOf<TodoModel>()
