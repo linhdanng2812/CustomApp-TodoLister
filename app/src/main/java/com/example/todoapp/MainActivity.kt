@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -57,7 +58,37 @@ class MainActivity : AppCompatActivity(), TodoAdapter.OnItemClickListener {
                 adapter.notifyDataSetChanged()
             }
         })
+
+        val sortTime = findViewById<Button>(R.id.sortBtn)
+        val sortAZ = findViewById<Button>(R.id.azsortBtn)
+        //sort by time
+        sortTime.setOnClickListener {
+            db.todoDao().getOrderedTaskTime().observe(this, Observer {
+                if (!it.isNullOrEmpty()) {
+                    list.clear()
+                    list.addAll(it)
+                    adapter.notifyDataSetChanged()
+                }else{
+                    list.clear()
+                    adapter.notifyDataSetChanged()
+                }
+            })
+        }
+        //sort by A-Z
+        sortAZ.setOnClickListener {
+            db.todoDao().getOrderedTaskAlpha().observe(this, Observer {
+                if (!it.isNullOrEmpty()) {
+                    list.clear()
+                    list.addAll(it)
+                    adapter.notifyDataSetChanged()
+                }else{
+                    list.clear()
+                    adapter.notifyDataSetChanged()
+                }
+            })
+        }
     }
+
 
     override fun onItemClick(position: Int) {
         val sharedPref = this.getSharedPreferences("TaskInfo", Context.MODE_PRIVATE)

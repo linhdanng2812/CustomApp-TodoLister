@@ -14,6 +14,12 @@ interface TodoDao {
     @Query("Select * from TodoModel where isFinished == 0")
     fun getTask(): LiveData<List<TodoModel>>
 
+    @Query("Select * from TodoModel where isFinished == 0 order by date, time")
+    fun getOrderedTaskTime(): LiveData<List<TodoModel>>
+
+    @Query("Select * from TodoModel where isFinished == 0 order by title")
+    fun getOrderedTaskAlpha(): LiveData<List<TodoModel>>
+
     //show list on the HistoryActivity
     @Query("Select * from TodoModel where isFinished == 1")
     fun getArchiveTask(): LiveData<List<TodoModel>>
